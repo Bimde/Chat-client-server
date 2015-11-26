@@ -28,14 +28,13 @@ public class ConnectionHandler implements Runnable {
 			e1.printStackTrace();
 		}
 		try {
-			this.input = new BufferedReader(new InputStreamReader(
-					client.getInputStream()));
+			this.input = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
 		} catch (IOException e) {
 			System.out.println("Error getting client's input stream");
 			e.printStackTrace();
 		}
 		try {
-			this.name = input.readLine();
+			this.name = this.input.readLine();
 		} catch (IOException e) {
 			System.err.println("Error getting client's name");
 			e.printStackTrace();
@@ -44,17 +43,26 @@ public class ConnectionHandler implements Runnable {
 		while (true) {
 			String message = "";
 			try {
-				message = input.readLine();
+				message = this.input.readLine();
 			} catch (IOException e) {
 				System.err.println("Error getting new message from client");
 				e.printStackTrace();
 			}
+			System.out.println("Sending message from handler: " + message);
 			this.main.newMessage(this.name, message);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
-	public void newMessage(String name, String message) {
+	void newMessage(String name, String message) {
+		System.out.println("Pushing messages to client " + this.name + ": From:" + name + " : " + message);
 		this.output.println(name);
 		this.output.println(message);
+		this.output.flush();
 	}
 }

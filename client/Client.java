@@ -21,7 +21,6 @@ public class Client {
 			System.out.println("Error conneciton to server");
 			e.printStackTrace();
 		}
-
 		try {
 			this.output = new PrintWriter(this.socket.getOutputStream());
 		} catch (IOException e1) {
@@ -29,14 +28,14 @@ public class Client {
 			e1.printStackTrace();
 		}
 		try {
-			this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		} catch (IOException e) {
 			System.out.println("Error getting server's input stream");
 			e.printStackTrace();
 		}
 		System.err.println("Connection Established");
 
-		this.output.println("myname");
+		this.output.println(this.gui.getName());
 		this.output.flush();
 
 		while (true) {
@@ -53,14 +52,22 @@ public class Client {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			System.out.println("Pushing message to client: " + message);
 			this.gui.addMessage(name, message);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
 
-	public void sendMessage(String name, String message) {
-		this.output.println(name);
+	public void sendMessage(String message) {
+		System.out.println("Sending message from client: " + message);
 		this.output.println(message);
+		this.output.flush();
 	}
 
 	public static void main(String[] args) {
