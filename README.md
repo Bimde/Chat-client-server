@@ -1,2 +1,2 @@
 # Chat-client-server
-Simple local-network chat program
+Networked chat program to allow for communication on network with application restrictions
